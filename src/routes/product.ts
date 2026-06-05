@@ -18,7 +18,7 @@ productRouter.get('/', (req, res) => {
 productRouter.get('/:id', (req, res) => {
     const pId = parseInt(req.params.id)
     const product = products.find(p => p.id === pId)
-    product ? res.json(product) : (res.status(404).json({ erreur: "Produit non trouvé" }));
+    return product ? res.json(product) : (res.status(404).json({ erreur: "Produit non trouvé" }));
 });
 
 productRouter.post("/", (req, res) => {
