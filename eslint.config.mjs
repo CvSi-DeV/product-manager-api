@@ -6,7 +6,7 @@ import { defineConfig } from "eslint/config";
 export default defineConfig([
   {
     // Ignorer dist/ et node_modules
-    ignores: ["dist/**", "node_modules/**"]
+    ignores: ["dist/**", "node_modules/**","src/generated/prisma/**"]
   },
   {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],

@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import express from 'express';
 import cors from 'cors';
 import productRouter, { PRODUCT_URL } from './routes/product';
