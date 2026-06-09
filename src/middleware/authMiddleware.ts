@@ -1,5 +1,5 @@
 //(îîî permet d'indiquer au TS de charger ce fichier avant la transpilation îîî)
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// eslint-disable-next-line
 /// <reference path="../types/express.d.ts" />
 //(îîî permet d'indiquer au TS de charger ce fichier avant la transpilation îîî)
 import { Request, Response, NextFunction } from "express";
