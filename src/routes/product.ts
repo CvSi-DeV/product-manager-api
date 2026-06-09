@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import prisma from '../lib/prisma';
+import authMiddleware from '../middleware/authMiddleware';
 
 export const PRODUCT_URL = "/api/products";
 const productRouter = Router();
@@ -26,11 +27,12 @@ productRouter.get('/:id', async (req, res) => {
     }
 });
 
-productRouter.post("/", async (req, res) => {
+productRouter.post("/", authMiddleware, async (req, res) => {
     const product = req.body;
 
     try {
         if (!product.name || product.name.trim() === '' || product.price <= 0) {
+            console.log(product);
             return res.status(400).json({ error: "Données invalides" });
         }
 
@@ -49,9 +51,9 @@ productRouter.post("/", async (req, res) => {
     }
 });
 
-productRouter.patch('/:id', async (req, res) => {
+productRouter.patch('/:id', authMiddleware, async (req, res) => {
     try {
-        const id = parseInt(req.params.id, 10);
+        const id = parseInt(req.params.id as string, 10);
         const dataToUpdate = req.body;
 
         // Valider seulement les champs envoyés
@@ -77,8 +79,8 @@ productRouter.patch('/:id', async (req, res) => {
     }
 });
 
-productRouter.delete('/:id', async (req, res) => {
-    const id = parseInt(req.params.id, 10);
+productRouter.delete('/:id', authMiddleware, async (req, res) => {
+    const id = parseInt(req.params.id as string, 10);
 
     try {
         await prisma.product.delete({
