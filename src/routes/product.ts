@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import prisma from '../lib/prisma';
 import authMiddleware from '../middleware/authMiddleware';
+import adminMiddleware from '../middleware/adminMiddleware';
 
 export const PRODUCT_URL = "/api/products";
 const productRouter = Router();
@@ -51,7 +52,7 @@ productRouter.post("/", authMiddleware, async (req, res) => {
     }
 });
 
-productRouter.patch('/:id', authMiddleware, async (req, res) => {
+productRouter.patch('/:id', authMiddleware, adminMiddleware, async (req, res) => {
     try {
         const id = parseInt(req.params.id as string, 10);
         const dataToUpdate = req.body;
@@ -79,7 +80,7 @@ productRouter.patch('/:id', authMiddleware, async (req, res) => {
     }
 });
 
-productRouter.delete('/:id', authMiddleware, async (req, res) => {
+productRouter.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
     const id = parseInt(req.params.id as string, 10);
 
     try {

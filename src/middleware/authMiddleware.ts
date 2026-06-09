@@ -1,5 +1,6 @@
 //(îîî permet d'indiquer au TS de charger ce fichier avant la transpilation îîî)
-// eslint-disable-next-line
+// Nécessaire pour forcer ts-node à charger les types globaux Express
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="../types/express.d.ts" />
 //(îîî permet d'indiquer au TS de charger ce fichier avant la transpilation îîî)
 import { Request, Response, NextFunction } from "express";
