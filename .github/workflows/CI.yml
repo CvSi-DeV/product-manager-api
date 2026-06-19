@@ -22,9 +22,12 @@ jobs:
 
       - name: Installer les dépendances
         run: npm install
-        
+
       - name: Générer le client Prisma
         run: npx prisma generate
+
+      - name: Application Test
+        run: npm run test
 
       - name: Linting
         run: npm run lint
