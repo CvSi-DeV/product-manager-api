@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import prisma from '../lib/prisma';
-import authMiddleware from '../middleware/authMiddleware';
 import adminMiddleware from '../middleware/adminMiddleware';
+import authMiddleware from '../middleware/authMiddleware';
 
 export const PRODUCT_URL = "/api/products";
 const productRouter = Router();
@@ -18,8 +18,12 @@ productRouter.get('/', async (req, res) => {
 });
 
 productRouter.get('/:id', async (req, res) => {
+    const pId = parseInt(req.params.id, 10);
+
+    if (isNaN(pId))
+        return res.status(400).json({ error: `argument de route invalide : ${req.method} ${req.originalUrl}` });
+
     try {
-        const pId = parseInt(req.params.id, 10)
         const product = await prisma.product.findUnique({ where: { id: pId } })
         return product ? res.json(product) : (res.status(404).json({ error: "Produit non trouvé" }));
     } catch (error) {
@@ -33,7 +37,6 @@ productRouter.post("/", authMiddleware, async (req, res) => {
 
     try {
         if (!product.name || product.name.trim() === '' || product.price <= 0) {
-            console.log(product);
             return res.status(400).json({ error: "Données invalides" });
         }
 
