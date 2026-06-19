@@ -1,7 +1,7 @@
+import bcrypt from "bcrypt";
 import { Router } from "express";
-import prisma from "../lib/prisma";
-import bcrypt from "bcrypt"
 import jwt, { SignOptions } from "jsonwebtoken";
+import prisma from "../lib/prisma";
 
 export const AUTH_URL = "/api/auth"
 const authRouter = Router();
@@ -35,7 +35,6 @@ authRouter.post("/register", async (req, res) => {
 });
 
 authRouter.post('/login', async (req, res) => {
-
     try {
         const loginInfo = req.body
         //1. Trouver l'utilisateur par email
