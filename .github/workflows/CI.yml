@@ -2,7 +2,7 @@ name: CI - product-manager-api
 
 on:
   push:
-    branches: [main, "feature/patch"]
+    branches: [main, "features/httpOnly"]
   pull_request:
     branches: [main]
 jobs:
