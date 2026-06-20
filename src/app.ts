@@ -1,3 +1,4 @@
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import 'dotenv/config';
 import express from 'express';
@@ -25,10 +26,13 @@ export const SERVER_PORT = port;
 //Création du serveur EXPRESS
 const app = express();
 
+//Middleware Cookie-Parser
+app.use(cookieParser());
+
 //Middleware JSON
 app.use(express.json());
 //Autorisation CORS
-app.use(cors({ origin: allowedOrigins }));
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 
 //health ENDPOINT
 app.get('/health', (req, res) => {

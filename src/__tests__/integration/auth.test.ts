@@ -136,7 +136,8 @@ describe('Post /api/auth/login', () => {
         const response = await request(app).post('/api/auth/login').send(conInfo);
         //Assert
         expect(response.status).toBe(200);
-        expect(response.body.token).toBeDefined();
+        expect(response.header['set-cookie']).toBeDefined();
+        expect(response.headers['set-cookie'][0]).toContain('token');
         expect(response.body.user).toBeDefined();
         expect(mockPrisma.user.findUnique).toHaveBeenCalledTimes(1);
     });

@@ -3,20 +3,12 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="../types/express.d.ts" />
 //(îîî permet d'indiquer au TS de charger ce fichier avant la transpilation îîî)
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    // récupérer le header
-    const authHeader = req.headers.authorization;
-    if (!authHeader)
-        return res.status(401).json({ error: "Header Authorization manquant" });
-
-    //récupérer le token
-    const tokenParts = authHeader.split(' ');
-    if (tokenParts[0] !== 'Bearer' || !tokenParts[1])
-        return res.status(401).json({ error: "Format: Bearer <token>" });
-    const token = tokenParts[1];
+    // récupérer le token dans le cookie
+    const token = req.cookies.token;
     if (!token)
         return res.status(401).json({ error: "Token manquant" });
 

@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { Router } from "express";
 import jwt, { SignOptions } from "jsonwebtoken";
 import prisma from "../lib/prisma";
+import authMiddleware from "../middleware/authMiddleware";
 
 export const AUTH_URL = "/api/auth"
 const authRouter = Router();
@@ -62,14 +63,34 @@ authRouter.post('/login', async (req, res) => {
         );
 
         //4. Retourner { token, user: { id, email, role } }
-        return res.status(200).json({
-            token: token,
-            user: { id: userInfo.id, email: userInfo.email, role: userInfo.role }
-        });
+        return res.status(200)
+            .cookie(
+                'token',
+                token,
+                {
+                    httpOnly: true,
+                    maxAge: 24 * 60 * 60 * 1000,
+                    secure: process.env.NODE_ENV === 'production',
+                    sameSite: 'strict'
+                })
+            .json(
+                {
+                    user: { id: userInfo.id, email: userInfo.email, role: userInfo.role }
+                });
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Erreur Register" });
     }
+});
+
+//Route d'identification de l'utilisateur connecté
+authRouter.get('/me', authMiddleware, (req, res) => {
+    return res.status(200).json({ user: req.user });
+});
+//Déconnection - suppression du cookie
+authRouter.post('/logout', (req, res) => {
+    res.status(200).clearCookie('token').json({ message: 'deconnecté' })
 });
 
 export default authRouter;

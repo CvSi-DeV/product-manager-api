@@ -114,7 +114,7 @@ describe('Post /api/products', () => {
         //Assert
         expect(response.status).toBe(401);
         expect(response.error).toBeDefined();
-        expect(response.text).toContain('Header Authorization manquant');
+        expect(response.text).toContain("Token manquant");
         expect(mockPrisma.product.create).not.toHaveBeenCalled();
     });
 
@@ -122,7 +122,7 @@ describe('Post /api/products', () => {
         mockPrisma.product.create.mockResolvedValue({ id: 6, name: 'name', price: 300, stock: 145, category: 'autre', createdAt: new Date() });
 
         const response = await request(app).post('/api/products/')
-            .auth(getToken(), { type: "bearer" })
+            .set('Cookie', `token=${getToken()}`)
             .send({ name: 'name', price: 300, stock: 145, category: 'autre' })
 
         expect(response.status).toBe(201);
@@ -134,7 +134,7 @@ describe('Post /api/products', () => {
         mockPrisma.product.create.mockRejectedValue(new Error('Données Invalides'));
 
         const response = await request(app).post('/api/products/')
-            .auth(getToken(), { type: "bearer" })
+            .set('Cookie', `token=${getToken()}`)
             .send({ name: 'name', price: -236, stock: 50, category: 'autre' });
 
         expect(response.status).toBe(400);
@@ -146,7 +146,7 @@ describe('Post /api/products', () => {
         mockPrisma.product.create.mockRejectedValue(new Error('connection refused'));
 
         const response = await request(app).post('/api/products/')
-            .auth(getToken(), { type: "bearer" })
+            .set('Cookie', `token=${getToken()}`)
             .send({ name: 'name', price: 236, stock: 50, category: 'autre' });
 
         expect(response.status).toBe(500);
@@ -166,7 +166,7 @@ describe('Patch /api/products/:id', () => {
         mockPrisma.product.update.mockRejectedValue(new Error('ne doit pas arriver dans ce test'));
 
         const response = await request(app).patch('/api/products/id')
-            .auth(getToken(true, true), { type: "bearer" })
+            .set('Cookie', `token=${getToken(true, true)}`)
             .send({ name: '      ', price: 236, stock: 50, category: 'autre' });
 
         expect(response.status).toBe(400);
@@ -178,7 +178,7 @@ describe('Patch /api/products/:id', () => {
         mockPrisma.product.update.mockRejectedValue(new Error('ne doit pas arriver dans ce test'));
 
         const response = await request(app).patch('/api/products/id')
-            .auth(getToken(true, true), { type: "bearer" })
+            .set('Cookie', `token=${getToken(true, true)}`)
             .send({ name: 'name', price: 0, stock: 50, category: 'autre' });
 
         expect(response.status).toBe(400);
@@ -190,7 +190,7 @@ describe('Patch /api/products/:id', () => {
         mockPrisma.product.update.mockRejectedValue(new Error('ne doit pas arriver dans ce test'));
 
         const response = await request(app).patch('/api/products/id')
-            .auth(getToken(true, true), { type: "bearer" })
+            .set('Cookie', `token=${getToken(true, true)}`)
             .send({ name: 'name', price: 236, stock: -56, category: 'autre' });
 
         expect(response.status).toBe(400);
@@ -202,7 +202,7 @@ describe('Patch /api/products/:id', () => {
         mockPrisma.product.update.mockResolvedValue({ id: 12, name: 'name', price: 236, stock: 56, category: 'autre', createdAt: new Date() })
 
         const response = await request(app).patch('/api/products/12')
-            .auth(getToken(true, true), { type: "bearer" })
+            .set('Cookie', `token=${getToken(true, true)}`)
             .send({ stock: 45 });
 
         expect(response.status).toBe(200);
@@ -228,7 +228,7 @@ describe('Delete /api/products/:id', () => {
         mockPrisma.product.delete.mockResolvedValue({ id: 12, name: 'name', price: 236, stock: 56, category: 'autre', createdAt: new Date() })
 
         const response = await request(app).delete('/api/products/12')
-            .auth(getToken(true, true), { type: 'bearer' });
+            .set('Cookie', `token=${getToken(true, true)}`)
 
         expect(response.status).toBe(200);
         expect(mockPrisma.product.delete).toHaveBeenCalledTimes(1);
