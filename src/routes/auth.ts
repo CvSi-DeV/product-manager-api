@@ -70,7 +70,7 @@ authRouter.post('/login', async (req, res) => {
                 {
                     httpOnly: true,
                     maxAge: 24 * 60 * 60 * 1000,
-                    secure: process.env.NODE_ENV === 'production',
+                    secure: !process.env.LOCAL_ENV,
                     sameSite: 'none'
                 })
             .json(
